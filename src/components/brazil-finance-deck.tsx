@@ -396,6 +396,7 @@ function IconButton({ label, onClick, children, disabled }: { label: string; onC
 export function BrazilFinanceDeck() {
   const [current, setCurrent] = useState(0);
   const [overview, setOverview] = useState(false);
+  const [printMode, setPrintMode] = useState(false);
   const [scale, setScale] = useState(0.6);
   const stageRef = useRef<HTMLDivElement>(null);
 
@@ -412,6 +413,7 @@ export function BrazilFinanceDeck() {
     const params = new URLSearchParams(window.location.search);
     const requested = Number(params.get("slide"));
     if (Number.isFinite(requested) && requested >= 1 && requested <= slides.length) setCurrent(requested - 1);
+    setPrintMode(params.has("print"));
   }, []);
 
   useEffect(() => {
@@ -429,6 +431,8 @@ export function BrazilFinanceDeck() {
   useEffect(() => {
     document.title = `${current + 1}/${slides.length} — ${slides[current].title}`;
     const onKey = (event: KeyboardEvent) => {
+      const target = event.target;
+      if (target instanceof HTMLElement && target.closest("button, a, input, textarea, select")) return;
       if (event.key === "ArrowRight" || event.key === "PageDown" || event.key === " ") { event.preventDefault(); go(current + 1); }
       if (event.key === "ArrowLeft" || event.key === "PageUp") { event.preventDefault(); go(current - 1); }
       if (event.key.toLowerCase() === "g") setOverview(v => !v);
@@ -444,8 +448,24 @@ export function BrazilFinanceDeck() {
     const url = new URL(window.location.href);
     url.searchParams.set("print", "1");
     window.history.replaceState({}, "", url);
-    window.print();
+    setPrintMode(true);
   };
+
+  useEffect(() => {
+    if (!printMode) return;
+    const timer = window.setTimeout(() => window.print(), 120);
+    const restore = () => {
+      const url = new URL(window.location.href);
+      url.searchParams.delete("print");
+      window.history.replaceState({}, "", url);
+      setPrintMode(false);
+    };
+    window.addEventListener("afterprint", restore, { once: true });
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("afterprint", restore);
+    };
+  }, [printMode]);
 
   const enterFullscreen = async () => {
     if (!document.fullscreenElement) await document.documentElement.requestFullscreen();
@@ -453,8 +473,6 @@ export function BrazilFinanceDeck() {
   };
 
   const stageStyle = useMemo(() => ({ "--deck-scale": scale } as CSSProperties), [scale]);
-  const printMode = typeof window !== "undefined" && new URLSearchParams(window.location.search).has("print");
-
   if (printMode) return <div className="print-deck">{slides.map((slide, index) => <SlideFrame key={slide.title} index={index} slide={slide}/>)}</div>;
 
   return <div className="deck-app">
