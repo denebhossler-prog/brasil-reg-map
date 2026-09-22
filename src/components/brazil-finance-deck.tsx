@@ -148,7 +148,7 @@ const slides: SlideDef[] = [
     source: SOURCE,
     content: <><Title kicker="HOW THE SYSTEM EVOLVED">От Banco do Brasil до Pix и цифрового финансового рынка</Title>
       <div className="timeline reveal">
-        {[
+        {([
           ["1808", "Banco do Brasil"], ["1964", "Создание BCB и реформа SFN"], ["1967", "Современная структура SFN"], ["1994", "Plano Real"], ["1999", "Плавающий FX + инфляционное таргетирование"], ["2013", "Basel III"], ["2020", "Pix"], ["2021", "Open Finance"], ["2021–22", "Lei 14.286: новая FX-база"], ["2025", "Новая методика капитала"], ["2025–26", "Усиление правил digital finance"],
         ] as const).map(([year, text], i) => <div className="timeline-item" key={year + text}><span>{i + 1}</span><strong>{year}</strong><p>{text}</p></div>)}
       </div>
@@ -266,7 +266,7 @@ const slides: SlideDef[] = [
     title: "Что именно пытается контролировать регулятор?",
     section: "capital",
     content: <><Title kicker="WHAT RISKS ARE CONTROLLED">Что именно пытается контролировать регулятор?</Title>
-      <div className="risk-layout reveal"><div className="risk-grid">{[
+      <div className="risk-layout reveal"><div className="risk-grid">{([
         ["CREDIT RISK","Заёмщик не возвращает кредит"],["MARKET RISK","Изменение ставок, FX, цен активов"],["LIQUIDITY RISK","Обязательства нельзя выполнить вовремя"],["OPERATIONAL RISK","Ошибки, fraud, сбои"],["CYBER RISK","Атаки, утечки, компрометация"],["AML/CFT RISK","Отмывание денег и финансирование терроризма"],
       ] as const).map(([a,b],i)=><Card title={a} tone={i>2?"risk":"navy"} key={a}>{b}</Card>)}</div><div className="stability-core"><strong>CAPITAL</strong><span>+</span><strong>LIQUIDITY</strong><span>+</span><strong>GOVERNANCE</strong><span>+</span><strong>CONTROLS</strong><ArrowDown/><b>FINANCIAL STABILITY</b></div></div>
     </>,
