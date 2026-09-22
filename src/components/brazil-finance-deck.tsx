@@ -33,7 +33,11 @@ import {
   type ReactNode,
 } from "react";
 
-const SOURCE = "Источник: Banco Central do Brasil / CMN / CVM / SUSEP / PREVIC / B3, актуально на 2026 г.";
+const SOURCE = "Источники: BCB / CMN / CVM / SUSEP / PREVIC / B3; нормативная база и данные датированы на слайдах";
+const SEGMENTATION_SOURCE = "Источник: Resolução CMN nº 4.553/2017, редакция с изменениями по Resolução CMN nº 5.194/2024";
+const CAPITAL_REFORM_SOURCE = "Источник: Resolução Conjunta nº 14 и Resolução BCB nº 517 от 03.11.2025; переходные положения — до 2028 г.";
+const BASEL_SOURCE = "Источник: Basel Committee, Basel III framework; уровни показаны как международная базовая рамка BCBS";
+const CONCENTRATION_SOURCE = "Источник: BCB, Relatório de Economia Bancária 2023; данные на конец 2023 г.";
 
 type Section = "regulation" | "payments" | "banks" | "capital" | "markets";
 
@@ -146,7 +150,7 @@ const slides: SlideDef[] = [
       <div className="timeline reveal">
         {[
           ["1808", "Banco do Brasil"], ["1964", "Создание BCB и реформа SFN"], ["1967", "Современная структура SFN"], ["1994", "Plano Real"], ["1999", "Плавающий FX + инфляционное таргетирование"], ["2013", "Basel III"], ["2020", "Pix"], ["2021", "Open Finance"], ["2021–22", "Lei 14.286: новая FX-база"], ["2025", "Новая методика капитала"], ["2025–26", "Усиление правил digital finance"],
-        ].map(([year, text], i) => <div className="timeline-item" key={year + text}><span>{i + 1}</span><strong>{year}</strong><p>{text}</p></div>)}
+        ] as const).map(([year, text], i) => <div className="timeline-item" key={year + text}><span>{i + 1}</span><strong>{year}</strong><p>{text}</p></div>)}
       </div>
       <div className="statement reveal delay-2">От классической банковской модели — к высокоцифровизированной системе с сильным пруденциальным надзором.</div>
     </>,
@@ -154,7 +158,7 @@ const slides: SlideDef[] = [
   {
     title: "Национальная финансовая система Бразилии — SFN",
     section: "regulation",
-    source: SOURCE,
+    source: SEGMENTATION_SOURCE,
     content: <><Title kicker="HOW THE SYSTEM IS BUILT">Национальная финансовая система Бразилии — SFN</Title>
       <div className="architecture-grid reveal">
         <div className="architecture-level"><span>НОРМАТИВНАЯ ПОЛИТИКА</span><Node tone="gold">CMN<small>Conselho Monetário Nacional</small></Node><Node tone="gold">CNSP<small>Страховая политика</small></Node></div>
@@ -195,19 +199,19 @@ const slides: SlideDef[] = [
     source: SOURCE,
     content: <><Title kicker="S1–S5 = PRUDENTIAL SEGMENTATION">S1–S5: масштаб определяет глубину требований</Title>
       <div className="segmentation reveal"><div className="stairs">{[
-        ["S5","< 0,1% PIB","Упрощённая методология · упрощённый профиль риска"],
+        ["S5","Особый упрощённый режим","Для отвечающих критериям малых и низкосложных организаций; не диапазон по доле ВВП"],
         ["S4","< 0,1% PIB","Значительно упрощённая prudential framework"],
         ["S3","0,1–1% PIB","Упрощения по отдельным рискам"],
         ["S2","1–10% PIB","Basel с отдельными упрощениями"],
         ["S1","≥ 10% PIB","Полное соответствие Basel / значимая международная деятельность"],
       ].map(([s,p,d],i)=><div className={`stair stair-${i+1}`} key={s}><strong>{s}</strong><span>{p}</span><small>{d}</small></div>)}</div>
-      <div className="type-panel"><Tag tone="teal">PAYMENT INSTITUTIONS</Tag>{[["TYPE 1","Финансовая организация или конгломерат с платежной деятельностью"],["TYPE 2","Платежная группа без финансовой организации"],["TYPE 3","Платежная группа, куда входит финансовая организация"]].map(x=><div className="type-row" key={x[0]}><strong>{x[0]}</strong><span>{x[1]}</span></div>)}<div className="warning-note">S1–S5 ≠ валютная система</div></div></div>
+      <div className="type-panel"><Tag tone="teal">ОТДЕЛЬНЫЙ РЕЖИМ</Tag>{[["TYPE 1","Финансовая организация или конгломерат с платёжной деятельностью"],["TYPE 2","Платёжная группа без финансовой организации"],["TYPE 3","Платёжная группа, куда входит финансовая организация"]].map(x=><div className="type-row" key={x[0]}><strong>{x[0]}</strong><span>{x[1]}</span></div>)}<div className="warning-note">Платёжные институты исключены из S1–S5 и регулируются отдельными нормами BCB. S1–S5 ≠ FX.</div></div></div>
     </>,
   },
   {
     title: "FX Market: как регулируется валютный рынок?",
     section: "payments",
-    source: SOURCE,
+    source: CAPITAL_REFORM_SOURCE,
     content: <><Title kicker="FX REGULATION = CMN + BCB + AUTHORIZED PARTICIPANTS">FX Market: как регулируется валютный рынок?</Title>
       <div className="horizontal-chain reveal"><Node tone="gold">CMN<small>общие направления</small></Node><Arrow/><Node>BCB<small>лицензирование и контроль</small></Node><Arrow/><Node tone="teal">AUTHORIZED INSTITUTIONS<small>Banks · FX brokers · authorized FIs</small></Node><Arrow/><Node tone="green">FX OPERATIONS<small>Spot · Forward · Derivatives · Transfers · non-resident BRL</small></Node><Arrow/><Node tone="risk">CONTROLS<small>Reporting · AML/CFT</small></Node></div>
       <div className="law-grid"><Card title="Lei nº 14.286/2021" tone="green">Foreign Exchange and International Capital Law</Card><Card title="CMN Resolution 5.042/2022">Нормативная рамка валютного рынка</Card><Card title="BCB Resolution 277/2022" tone="teal">Операционные и отчётные правила</Card></div>
@@ -238,7 +242,7 @@ const slides: SlideDef[] = [
     source: SOURCE,
     content: <><Title kicker="LATEST REGULATORY CHANGES · 2025–2026">2025: новый подход к минимальному капиталу</Title>
       <div className="before-after reveal"><div className="ba-panel muted"><Tag>ДО</Tag><strong>Юридический тип</strong><ArrowDown/><span>фиксированный минимум категории</span></div><ArrowRight className="big-arrow"/><div className="ba-panel gold"><Tag tone="gold">ПОСЛЕ</Tag><strong>Реальная деятельность</strong><ArrowDown/><span>риски + инфраструктура + funding + bank status</span></div></div>
-      <div className="capital-formula"><strong>MINIMUM CAPITAL</strong><span>=</span>{["Initial cost R$2 млн","IT-intensive до R$5 млн","Operations R$1–7 млн","Investments R$5–8 млн","Funding × 60–200%","Bank surcharge R$30 млн"].map((x,i)=><div key={x} className={i===5?"formula-bank":""}>{x}</div>)}</div>
+      <div className="capital-formula"><strong>MINIMUM CAPITAL</strong><span>=</span>{["Базовый компонент","Разрешённые виды деятельности","Интенсивность IT","Привлечение ресурсов","Дополнительные факторы риска"].map((x,i)=><div key={x} className={i===4?"formula-bank":""}>{x}</div>)}</div>
       <div className="concept-contrast"><span>Minimum Capital</span><strong>≠</strong><span>Capital Adequacy Ratio</span><strong>≠</strong><span>Accounting Equity</span><strong>≠</strong><span>Minimum Paid-in Capital</span></div>
       <div className="quote">“Pay for the complexity you actually operate.”</div>
     </>,
@@ -246,7 +250,7 @@ const slides: SlideDef[] = [
   {
     title: "Как изменились минимальные требования?",
     section: "capital",
-    source: SOURCE,
+    source: CAPITAL_REFORM_SOURCE,
     content: <><Title kicker="BEFORE / AFTER">Как изменились минимальные требования?</Title>
       <div className="two-col wide-left reveal"><div className="data-table"><div className="table-row table-head"><span>Организация</span><span>До реформы</span><span>Новая методика</span><span>Смысл</span></div>{[
         ["Банковские","Минимумы по типу","По деятельности","Сложность — ключевой фактор"],
@@ -255,7 +259,7 @@ const slides: SlideDef[] = [
         ["Brokers / custodians","Фиксированный подход","Activity-based","Учитываются реальные функции"],
         ["С использованием “Bank”","—","+ R$30 млн","Дополнительный капитал"],
       ].map(r=><div className="table-row" key={r[0]}>{r.map((x,i)=>i===0?<strong key={x}>{x}</strong>:<span key={x}>{x}</span>)}</div>)}</div>
-      <div className="kpi-stack"><Tag tone="gold">ПРИМЕРЫ BCB</Tag><Metric value="R$12,4 → 17,4 млн" label="IP с prepaid account: без Pix → с Pix" tone="gold"/><Metric value="R$26 → до 60 млн" label="Financial company: зависит от деятельности" tone="navy"/><p>Переход для существующих организаций — <strong>до 2027 года</strong></p></div></div>
+      <div className="kpi-stack"><Tag tone="gold">ЛОГИКА МЕТОДИКИ</Tag><Metric value="ACTIVITIES" label="Состав разрешённых операций влияет на расчёт" tone="gold"/><Metric value="RISK + INFRA" label="Учитываются риск-профиль и технологическая инфраструктура" tone="navy"/><p>Переходные положения для действующих организаций — <strong>до 2028 года</strong>.</p></div></div>
     </>,
   },
   {
@@ -264,17 +268,17 @@ const slides: SlideDef[] = [
     content: <><Title kicker="WHAT RISKS ARE CONTROLLED">Что именно пытается контролировать регулятор?</Title>
       <div className="risk-layout reveal"><div className="risk-grid">{[
         ["CREDIT RISK","Заёмщик не возвращает кредит"],["MARKET RISK","Изменение ставок, FX, цен активов"],["LIQUIDITY RISK","Обязательства нельзя выполнить вовремя"],["OPERATIONAL RISK","Ошибки, fraud, сбои"],["CYBER RISK","Атаки, утечки, компрометация"],["AML/CFT RISK","Отмывание денег и финансирование терроризма"],
-      ].map(([a,b],i)=><Card title={a} tone={i>2?"risk":"navy"} key={a}>{b}</Card>)}</div><div className="stability-core"><strong>CAPITAL</strong><span>+</span><strong>LIQUIDITY</strong><span>+</span><strong>GOVERNANCE</strong><span>+</span><strong>CONTROLS</strong><ArrowDown/><b>FINANCIAL STABILITY</b></div></div>
+      ] as const).map(([a,b],i)=><Card title={a} tone={i>2?"risk":"navy"} key={a}>{b}</Card>)}</div><div className="stability-core"><strong>CAPITAL</strong><span>+</span><strong>LIQUIDITY</strong><span>+</span><strong>GOVERNANCE</strong><span>+</span><strong>CONTROLS</strong><ArrowDown/><b>FINANCIAL STABILITY</b></div></div>
     </>,
   },
   {
     title: "Basel III: международный язык банковской устойчивости",
     section: "capital",
-    source: SOURCE,
+    source: BASEL_SOURCE,
     content: <><Title kicker="GLOBAL STANDARD → NATIONAL RULES">Basel III: международный язык банковской устойчивости</Title>
       <div className="two-col reveal"><div className="basel-timeline">{[["1988","BASEL I","8% capital / RWA"],["2004","BASEL II","Risk-sensitive capital + supervision"],["2010–17","BASEL III","Quality · buffers · liquidity · leverage"]].map((x,i)=><div className="basel-era" key={x[0]}><span>{x[0]}</span><strong>{x[1]}</strong><p>{x[2]}</p>{i<2&&<Arrow vertical/>}</div>)}</div>
       <div className="minimums"><Tag tone="gold">BASEL III MINIMUMS</Tag>{[["CET1","4,5% RWA"],["Tier 1","6%"],["Total Capital","8%"],["Conservation Buffer","2,5%"],["Leverage Ratio","3%"],["LCR","100%"],["NSFR","100%"]].map(x=><div key={x[0]}><span>{x[0]}</span><strong>{x[1]}</strong></div>)}</div></div>
-      <div className="insight-line">Basel — международный стандарт; юридическую силу он получает через национальные нормы.</div>
+      <div className="insight-line">Международная база BCBS: CET1 — базовый капитал 1-го уровня; RWA — активы, взвешенные по риску; LCR / NSFR — коэффициенты ликвидности; Leverage Ratio — коэффициент левереджа. В Бразилии применяются национальные нормы и буферы.</div>
     </>,
   },
   {
@@ -289,7 +293,7 @@ const slides: SlideDef[] = [
   {
     title: "Капитала недостаточно: банк должен иметь ликвидность",
     section: "capital",
-    source: SOURCE,
+    source: CONCENTRATION_SOURCE,
     content: <><Title kicker="LIQUIDITY + LEVERAGE">Капитала недостаточно: банк должен иметь ликвидность</Title>
       <div className="three-cards reveal"><Card title="LCR · 100%" icon={WalletCards} tone="green"><strong>Коэффициент покрытия ликвидностью</strong><p>Способность пережить стрессовый отток на горизонте 30 дней.</p></Card><Card title="NSFR · 100%" icon={Layers3} tone="gold"><strong>Коэффициент стабильного фондирования</strong><p>Соответствие стабильного фондирования долгосрочным активам.</p></Card><Card title="LEVERAGE · 3%" icon={TrendingUp}><strong>Коэффициент левереджа</strong><p>Tier 1 Capital / Total Exposure.</p></Card></div>
       <div className="statement"><strong>Capital adequacy ≠ liquidity adequacy.</strong> Хорошая капитализация не исключает кризис ликвидности.</div>
@@ -429,7 +433,7 @@ export function BrazilFinanceDeck() {
   }, []);
 
   useEffect(() => {
-    document.title = `${current + 1}/${slides.length} — ${slides[current].title}`;
+    document.title = `${current + 1}/${slides.length} — ${slides[current]?.title ?? "Финансовая система Бразилии"}`;
     const onKey = (event: KeyboardEvent) => {
       const target = event.target;
       if (target instanceof HTMLElement && target.closest("button, a, input, textarea, select")) return;
@@ -475,6 +479,9 @@ export function BrazilFinanceDeck() {
   const stageStyle = useMemo(() => ({ "--deck-scale": scale } as CSSProperties), [scale]);
   if (printMode) return <div className="print-deck">{slides.map((slide, index) => <SlideFrame key={slide.title} index={index} slide={slide}/>)}</div>;
 
+  const activeSlide = slides[current];
+  if (!activeSlide) return null;
+
   return <div className="deck-app">
     <div className="deck-toolbar">
       <div className="toolbar-brand"><span>BR</span><div><b>BRAZIL FINANCIAL SYSTEM</b><small>Analytical presentation · 2026</small></div></div>
@@ -485,11 +492,11 @@ export function BrazilFinanceDeck() {
       </div>
     </div>
     <div className="deck-stage" ref={stageRef} style={stageStyle}>
-      <div className="slide-wrapper" key={current}><SlideFrame index={current} slide={slides[current]}/></div>
+      <div className="slide-wrapper" key={current}><SlideFrame index={current} slide={activeSlide}/></div>
     </div>
     <div className="deck-controls">
       <IconButton label="Предыдущий слайд" onClick={() => go(current - 1)} disabled={current === 0}><ArrowLeft/></IconButton>
-      <div className="progress-group"><div className="slide-count"><b>{String(current + 1).padStart(2,"0")}</b><span>/ {slides.length}</span></div><div className="progress-track"><span style={{ width: `${((current + 1) / slides.length) * 100}%` }}/></div><span>{slides[current].title}</span></div>
+      <div className="progress-group"><div className="slide-count"><b>{String(current + 1).padStart(2,"0")}</b><span>/ {slides.length}</span></div><div className="progress-track"><span style={{ width: `${((current + 1) / slides.length) * 100}%` }}/></div><span>{activeSlide.title}</span></div>
       <IconButton label="Следующий слайд" onClick={() => go(current + 1)} disabled={current === slides.length - 1}><ArrowRight/></IconButton>
     </div>
     {overview && <div className="overview" role="dialog" aria-modal="true" aria-label="Обзор слайдов"><div className="overview-head"><div><b>ОБЗОР ПРЕЗЕНТАЦИИ</b><span>Выберите слайд</span></div><IconButton label="Закрыть обзор" onClick={() => setOverview(false)}><X/></IconButton></div><div className="overview-grid">{slides.map((slide,index)=><button key={slide.title} className={index===current?"active":""} onClick={()=>{go(index);setOverview(false)}}><div className="thumb-stage"><div className="thumb-slide"><SlideFrame index={index} slide={slide}/></div></div><span>{String(index+1).padStart(2,"0")} · {slide.title}</span></button>)}</div></div>}
